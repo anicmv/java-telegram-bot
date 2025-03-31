@@ -28,7 +28,7 @@ RUN mkdir -p /app/log
 
 COPY ./java-telegram-bot.jar .
 
-EXPOSE 8081
+EXPOSE 8082
 
 # 设置启动命令
 CMD ["sh", "-c", "nohup java -jar java-telegram-bot.jar --spring.profiles.active=pro > /app/log/java-telegram-bot.log 2>&1 & tail -f /app/log/java-telegram-bot.log"]
