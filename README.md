@@ -1,2 +1,2 @@
-# java_telegram_bot
+# java-telegram-bot
 ...

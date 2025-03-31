@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQuery
 /**
  * @author anicmv
  * @date 2025/3/30 00:48
- * @description 2.文章示例
+ * @description 2.biss
  */
 @Component
 public class BissInlineQueryResultProvider implements InlineQueryResultProvider {

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.anicmv</groupId>
-    <artifactId>java_telegram_bot</artifactId>
+    <artifactId>java-telegram-bot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>java_telegram_bot</name>
-    <description>java_telegram_bot</description>
+    <name>java-telegram-bot</name>
+    <description>java-telegram-bot</description>
     <url/>
     <licenses>
         <license/>

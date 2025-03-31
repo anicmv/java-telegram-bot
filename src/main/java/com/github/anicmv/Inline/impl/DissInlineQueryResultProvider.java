@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQuery
 /**
  * @author anicmv
  * @date 2025/3/30 00:48
- * @description 2.文章示例
+ * @description 2.diss
  */
 @Component
 public class DissInlineQueryResultProvider implements InlineQueryResultProvider {
@@ -25,7 +25,7 @@ public class DissInlineQueryResultProvider implements InlineQueryResultProvider 
 
     @Override
     public String getSortId() {
-        return BotConstant.N_2;
+        return BotConstant.N_5;
     }
 
     @Override

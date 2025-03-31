@@ -1,5 +1,5 @@
 spring:
   application:
-    name: java_telegram_bot
+    name: java-telegram-bot
   profiles:
     active: dev

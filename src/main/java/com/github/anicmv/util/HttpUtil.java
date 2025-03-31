@@ -62,4 +62,26 @@ public class HttpUtil {
         return null;
     }
 
+
+    public static String redirectUrl(String url, Map<String, String> headers) {
+        if (StrUtil.isEmpty(url)) {
+            log.error("URL cannot be null or empty");
+            return null;
+        }
+        try {
+            HttpRequest request = requestBuilderGet(url, headers).build();
+            HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+
+            if (statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 307 || statusCode == 308) {
+                return response.headers().firstValue("Location").orElse("");
+            }
+
+            return null;
+        } catch (Exception e) {
+            log.error("Error occurred during GET request to {}: ", url, e);
+        }
+        return null;
+    }
+
 }

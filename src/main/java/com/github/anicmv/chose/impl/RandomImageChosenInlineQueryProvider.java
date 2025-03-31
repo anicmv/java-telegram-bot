@@ -21,7 +21,7 @@ public class RandomImageChosenInlineQueryProvider implements ChosenInlineQueryPr
     @Override
     public boolean supports(ChosenInlineQuery chosenInlineQuery) {
         // 内联菜单的id
-        return BotConstant.N_1.equals(chosenInlineQuery.getResultId());
+        return BotConstant.N_3.equals(chosenInlineQuery.getResultId());
     }
 
     @Override
@@ -43,7 +43,6 @@ public class RandomImageChosenInlineQueryProvider implements ChosenInlineQueryPr
         return Optional.of(editMessageMedia);
     }
 
-    // 示例方法：返回一个随机图片的 URL
     private String getRandomImageUrl() {
         String[] images = new String[]{
                 "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2919558104.webp",

@@ -15,12 +15,26 @@ public class BotConstant {
     public static final String FADIAN = "/fadian";
 
 
+    public static final String CALLBACK_RANDOM_ECY = "RANDOM_ECY";
+    public static final String CALLBACK_RANDOM_SCY = "RANDOM_SCY";
 
 
+    // 随机ecy
     public static final String N_1 = "1";
+
     public static final String N_2 = "2";
+    // fadian
     public static final String N_3 = "3";
+    // biss
     public static final String N_4 = "4";
+    // diss
     public static final String N_5 = "5";
+    // kfc
     public static final String N_6 = "6";
+    // 文章示例
+    public static final String N_99 = "99";
+    // 摸鱼
+    public static final String N_8 = "8";
+    // 天气
+    public static final String N_9 = "9";
 }

@@ -1,0 +1,11 @@
+version: "3.8"
+#  docker compose up --build -d
+services:
+  ptgen:
+    build: .
+    image: java-telegram-bot
+    container_name: java-telegram-bot
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./log:/app/log/

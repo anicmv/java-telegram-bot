@@ -1,6 +1,9 @@
 package com.github.anicmv.callback.impl;
 
 import com.github.anicmv.callback.CallbackQueryProvider;
+import com.github.anicmv.contant.BotConstant;
+import com.github.anicmv.util.HttpUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
@@ -8,7 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 
 /**
@@ -16,21 +21,20 @@ import java.util.Optional;
  * @date 2025/3/30 00:48
  * @description 随机图片
  */
+@Slf4j
 @Component
-public class RandomImageCallbackQueryProvider implements CallbackQueryProvider {
+public class RandomScyImageCallbackQueryProvider implements CallbackQueryProvider {
 
     @Override
     public boolean supports(CallbackQuery callbackQuery) {
-        return "RANDOM_IMAGE".equals(callbackQuery.getData());
+        return BotConstant.CALLBACK_RANDOM_SCY.equals(callbackQuery.getData());
     }
 
     @Override
     public Optional<PartialBotApiMethod<?>> handle(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
-        // 构建新的 InputMediaPhoto ：指定随机图片及说明文字
         InputMediaPhoto inputMediaPhoto = InputMediaPhoto.builder()
-                .media(getRandomImageUrl())
-                .caption("亲爱的亲爱的{昵称}\n今天的老婆是 蒂安娜·兰斯特!")
+                .media(getImageUrl())
                 .build();
 
         EditMessageMedia editMessageMedia;
@@ -55,12 +59,45 @@ public class RandomImageCallbackQueryProvider implements CallbackQueryProvider {
         return Optional.of(editMessageMedia);
     }
 
-    // 示例方法：返回一个随机图片的 URL
-    private String getRandomImageUrl() {
+    private String getImageUrl() {
+        String[] directUrl = new String[] {
+                "https://acg.suyanw.cn/pcmv/",
+                "https://acg.suyanw.cn/sjmv/random.php",
+        };
+
+        Random random = new Random();
+        // 产生一个随机数，这里选取 0 到 99 的区间
+        int randomNum = random.nextInt(100);
+
+        if (randomNum % 2 == 1) {
+            // 如果随机数为奇数，从直链数组中随机选取一个
+            int index = random.nextInt(directUrl.length);
+            return directUrl[index];
+        } else {
+            // 如果随机数为偶数，返回重定向的图片链接
+            return getRedirectImageUrl();
+        }
+    }
+
+    // 返回一个随机图片的 URL
+    private String getRedirectImageUrl() {
+        String randomApi = getApi();
+        String redirectUrl = HttpUtil.redirectUrl(randomApi, Map.of());
+        if (redirectUrl == null) {
+            log.error("Error occurred during redirect URL");
+        }
+        return redirectUrl;
+    }
+
+
+    private String getApi() {
+        // 随机二次元头像 https://www.loliapi.com/acg/pp/
         String[] images = new String[]{
-                "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2919558104.webp",
-                "https://img2.doubanio.com/view/photo/s_ratio_poster/public/p2918518301.webp",
-                "https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2919591337.webp"
+                "https://acg.suyanw.cn/meizi/random.php",
+                "https://acg.suyanw.cn/sjmv/random.php",
+                "https://acg.suyanw.cn/jk/random.php",
+                "https://acg.suyanw.cn/whitesilk/random.php",
+                "https://acg.suyanw.cn/hs/random.php",
         };
         int idx = (int) (Math.random() * images.length);
         return images[idx];
