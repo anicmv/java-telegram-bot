@@ -13,7 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 
 
 /**
@@ -34,7 +33,7 @@ public class RandomScyImageCallbackQueryProvider implements CallbackQueryProvide
     public Optional<PartialBotApiMethod<?>> handle(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         InputMediaPhoto inputMediaPhoto = InputMediaPhoto.builder()
-                .media(getImageUrl())
+                .media(getRedirectImageUrl())
                 .build();
 
         EditMessageMedia editMessageMedia;
@@ -57,26 +56,6 @@ public class RandomScyImageCallbackQueryProvider implements CallbackQueryProvide
         }
 
         return Optional.of(editMessageMedia);
-    }
-
-    private String getImageUrl() {
-        String[] directUrl = new String[] {
-                "https://acg.suyanw.cn/pcmv/",
-                "https://acg.suyanw.cn/sjmv/random.php",
-        };
-
-        Random random = new Random();
-        // 产生一个随机数，这里选取 0 到 99 的区间
-        int randomNum = random.nextInt(100);
-
-        if (randomNum % 2 == 1) {
-            // 如果随机数为奇数，从直链数组中随机选取一个
-            int index = random.nextInt(directUrl.length);
-            return directUrl[index];
-        } else {
-            // 如果随机数为偶数，返回重定向的图片链接
-            return getRedirectImageUrl();
-        }
     }
 
     // 返回一个随机图片的 URL

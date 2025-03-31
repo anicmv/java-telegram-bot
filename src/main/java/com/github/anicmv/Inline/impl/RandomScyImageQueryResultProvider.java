@@ -53,7 +53,7 @@ class RandomScyImageQueryResultProvider implements InlineQueryResultProvider {
                 .photoUrl(imageUrl)
                 .thumbnailUrl(imageUrl)
                 .title("随机scy")
-                .caption("sb " + clickableUsername + "\n三次元就别看了!多看二次元!!")
+                .caption("不可爱的 " + clickableUsername + "\n三次元少看! 二次元多看!!")
                 .parseMode("markdown")
                 .replyMarkup(markup)
                 .build();

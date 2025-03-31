@@ -53,7 +53,7 @@ class RandomEcyImageQueryResultProvider implements InlineQueryResultProvider {
                 .photoUrl(imageUrl)
                 .thumbnailUrl(imageUrl)
                 .title("随机ecy")
-                .caption("亲爱的" + clickableUsername + "\n涩图\uD83D\uDC47点击即送!")
+                .caption("可爱的 " + clickableUsername + "\n涩图\uD83D\uDC47点击即送!")
                 .parseMode("markdown")
                 .replyMarkup(markup)
                 .build();
