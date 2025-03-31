@@ -1,6 +1,6 @@
 package com.github.anicmv.command;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
@@ -17,5 +17,5 @@ public interface BotCommand {
     /**
      * 处理命令，并返回需要发送的消息对象
      */
-    SendMessage execute(Update update);
+    PartialBotApiMethod<?> execute(Update update);
 }

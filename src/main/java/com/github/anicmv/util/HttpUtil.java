@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -78,6 +79,31 @@ public class HttpUtil {
             }
 
             return null;
+        } catch (Exception e) {
+            log.error("Error occurred during GET request to {}: ", url, e);
+        }
+        return null;
+    }
+
+
+
+    public static InputStream getInputStream(String url, Map<String, String> headers) {
+        if (StrUtil.isEmpty(url)) {
+            log.error("URL cannot be null or empty");
+            return null;
+        }
+
+        try {
+            HttpRequest request = requestBuilderGet(url, headers).build();
+            HttpResponse<InputStream> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofInputStream());
+            int statusCode = response.statusCode();
+
+            if (statusCode < 200 || statusCode >= 300) {
+                log.error("Request to {} failed with status code: {}", url, statusCode);
+                return null;
+            }
+
+            return response.body();
         } catch (Exception e) {
             log.error("Error occurred during GET request to {}: ", url, e);
         }

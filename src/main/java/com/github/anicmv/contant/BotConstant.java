@@ -13,6 +13,7 @@ public class BotConstant {
     public static final String DISS = "/diss";
     public static final String BISS = "/biss";
     public static final String FADIAN = "/fadian";
+    public static final String MO_YU = "/moyu";
 
 
     public static final String CALLBACK_RANDOM_ECY = "RANDOM_ECY";

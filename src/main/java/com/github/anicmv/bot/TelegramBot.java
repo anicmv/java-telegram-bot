@@ -11,6 +11,8 @@ import org.telegram.telegrambots.longpolling.starter.SpringLongPollingBot;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -52,6 +54,8 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
             switch (method) {
                 case BotApiMethod<?> botApiMethod -> telegramClient.execute(botApiMethod);
                 case EditMessageMedia editMessageMedia -> telegramClient.execute(editMessageMedia);
+                case SendPhoto sendPhoto -> telegramClient.execute(sendPhoto);
+                case SendDocument sendDocument -> telegramClient.execute(sendDocument);
                 case null, default -> {
                 }
             }

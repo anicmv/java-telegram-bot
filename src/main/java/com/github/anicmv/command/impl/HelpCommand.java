@@ -24,14 +24,15 @@ public class HelpCommand implements BotCommand {
         long chatId = update.getMessage().getChatId();
         String response = """
                 Available commands:
-                  /help    - Show available commands
-                  /hello   - Greets you
-                  /ping    - 存活测试
-                  /diss    - 骂人的
-                  /biss    - 骂人的的
-                  /fadian  - 发癫
-                  /kfc     - kfc文案
+                    /help   - 帮助
+                    /ping   - 存活测试
+                    /fadian - 发癫
+                    /diss   - diss
+                    /biss   - biss
+                    /kfc    - kfc文案
+                    /moyu   - 摸鱼日历
                 """;
+
         return SendMessage.builder()
                 .chatId(chatId)
                 .text(response)
