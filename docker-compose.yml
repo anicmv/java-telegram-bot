@@ -1,7 +1,7 @@
 version: "3.8"
 #  docker compose up --build -d
 services:
-  ptgen:
+  java-telegram-bot:
     build: .
     image: java-telegram-bot
     container_name: java-telegram-bot
