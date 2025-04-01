@@ -1,16 +1,19 @@
 package com.github.anicmv.callback.impl;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.github.anicmv.callback.CallbackQueryProvider;
 import com.github.anicmv.contant.BotConstant;
+import com.github.anicmv.util.BotUtil;
 import com.github.anicmv.util.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -32,74 +35,64 @@ public class RandomEcyImageCallbackQueryProvider implements CallbackQueryProvide
 
     @Override
     public Optional<PartialBotApiMethod<?>> handle(Update update) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        InputMediaPhoto inputMediaPhoto = InputMediaPhoto.builder()
-                .media(getImageUrl())
-                .build();
+        InputMediaPhoto.InputMediaPhotoBuilder<?, ?> builder = InputMediaPhoto.builder();
+        InputMediaPhoto inputMediaPhoto = getEditMessageMedia(builder);
 
-        EditMessageMedia editMessageMedia;
-        if (callbackQuery.getMessage() != null) {
-            Long chatId = callbackQuery.getMessage().getChatId();
-            Integer messageId = callbackQuery.getMessage().getMessageId();
-            editMessageMedia = EditMessageMedia.builder()
-                    .chatId(chatId)
-                    .messageId(messageId)
-                    .media(inputMediaPhoto)
-                    .build();
-        } else if (callbackQuery.getInlineMessageId() != null) {
-            String inlineMessageId = callbackQuery.getInlineMessageId();
-            editMessageMedia = EditMessageMedia.builder()
-                    .inlineMessageId(inlineMessageId)
-                    .media(inputMediaPhoto)
-                    .build();
-        } else {
-            return Optional.empty();
-        }
-
-        return Optional.of(editMessageMedia);
+        return BotUtil.getOptionalEditMessageMedia(update.getCallbackQuery(), inputMediaPhoto);
     }
 
-    private String getImageUrl() {
-        String[] directUrl = new String[] {
-                "https://api.lqbby.com/api/dm",
+    private InputMediaPhoto getEditMessageMedia(InputMediaPhoto.InputMediaPhotoBuilder<?, ?> builder) {
+        Random random = new Random();
+        // 随机生成 0, 1, 2 三个数中的一个
+        int choice = random.nextInt(3);
+
+        return switch (choice) {
+            case 0 ->
+                // 情况0：返回重定向图片URL
+                    builder.media(getRedirectImageUrl()).build();
+            case 1 ->
+                // 情况1：返回通过 getImage() 获取的图片，并设置文件名 "ecy.jpg"
+                    builder.media(getImage(), "ecy.jpg").build();
+            case 2 ->
+                // 情况2：返回 piXivUrl 图片
+                    builder.media(getImage(), "ecy.jpg").build();
+            default ->
+                // 默认情况，这里其实不会走到
+                    builder.media(getRedirectImageUrl()).build();
+        };
+    }
+
+
+    /**
+     * 返回图片二进制
+     */
+    private InputStream getImage() {
+        String[] directUrl = new String[]{
                 "https://api.sretna.cn/api/pc.php",
                 "https://api.sretna.cn/api/pe.php",
-                "https://acg.suyanw.cn/sjdm/random.php",
-                "https://acg.suyanw.cn/random.php",
+                "https://api.lqbby.com/api/dm",
         };
 
-        Random random = new Random();
-        // 产生一个随机数，这里选取 0 到 99 的区间
-        int randomNum = random.nextInt(100);
-
-        if (randomNum % 2 == 1) {
-            // 如果随机数为奇数，从直链数组中随机选取一个
-            int index = random.nextInt(directUrl.length);
-            return directUrl[index];
-        } else {
-            // 如果随机数为偶数，返回重定向的图片链接
-            return getRedirectImageUrl();
-        }
+        return BotUtil.randomImageInputStream(directUrl);
     }
 
-    // 示例方法：返回一个随机图片的 URL
+
+    // 返回一个随机图片的 URL
     private String getRedirectImageUrl() {
-        String randomApi = getApi();
-        String redirectUrl = HttpUtil.redirectUrl(randomApi, Map.of());
-        if (redirectUrl == null) {
-            log.error("Error occurred during redirect URL");
-        }
-        return redirectUrl;
-    }
-
-
-    private String getApi() {
         // 随机二次元头像 https://www.loliapi.com/acg/pp/
         String[] images = new String[]{
                 "https://moe.jitsu.top/img/",
-                "https://www.loliapi.com/bg/"
+                "https://www.loliapi.com/bg/",
         };
-        int idx = (int) (Math.random() * images.length);
-        return images[idx];
+
+        return BotUtil.randomUrl(images);
+    }
+
+
+    private String getPiXivUrl() {
+        String api = "https://api.mossia.top/randPic/pixiv";
+        String dataJson = HttpUtil.get(api, Map.of());
+        JSONObject data = JSONUtil.parseObj(dataJson);
+        return data.getStr("data");
     }
 }
