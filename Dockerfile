@@ -26,6 +26,8 @@ WORKDIR /app
 
 RUN mkdir -p /app/log
 
+RUN touch /app/log/java-telegram-bot.log
+
 COPY ./java-telegram-bot.jar .
 
 EXPOSE 8082

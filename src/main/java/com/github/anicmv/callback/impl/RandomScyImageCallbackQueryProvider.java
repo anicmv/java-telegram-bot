@@ -33,13 +33,13 @@ public class RandomScyImageCallbackQueryProvider implements CallbackQueryProvide
     public Optional<PartialBotApiMethod<?>> handle(Update update) {
 
         InputMediaPhoto.InputMediaPhotoBuilder<?, ?> builder = InputMediaPhoto.builder();
-        InputMediaPhoto inputMediaPhoto = getEditMessageMedia(builder);
+        InputMediaPhoto inputMediaPhoto = getInputMediaPhoto(builder);
 
         return BotUtil.getOptionalEditMessageMedia(update.getCallbackQuery(), inputMediaPhoto);
     }
 
 
-    private InputMediaPhoto getEditMessageMedia(InputMediaPhoto.InputMediaPhotoBuilder<?, ?> builder) {
+    private InputMediaPhoto getInputMediaPhoto(InputMediaPhoto.InputMediaPhotoBuilder<?, ?> builder) {
         Random random = new Random();
         int randomNum = random.nextInt(100);
 

@@ -1,5 +1,5 @@
 version: "3.8"
-#  docker compose up --build -d
+#  docker rm -f java-telegram-bot && docker rmi -f java-telegram-bot && docker compose up --build -d
 services:
   java-telegram-bot:
     build: .
