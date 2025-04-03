@@ -29,9 +29,13 @@ class RandomEcyImageQueryResultProvider implements InlineQueryResultProvider {
     @Override
     public InlineQueryResult createResult(InlineQuery inlineQuery) {
         String imageUrl = "https://jpg.moe/i/4rtnoeo1.jpeg";
+
+        String fullName = inlineQuery.getFrom().getFirstName() +
+                (inlineQuery.getFrom().getLastName() == null ? "" : inlineQuery.getFrom().getLastName());
+
         // 同时附加内联键盘按钮实现交互
         InlineKeyboardButton button = InlineKeyboardButton.builder()
-                .text("别急马上就到")
+                .text("\uD83D\uDE0D" + fullName + "\uD83D\uDE0D")
                 .callbackData(BotConstant.CALLBACK_RANDOM_ECY)
                 .build();
 
@@ -40,22 +44,16 @@ class RandomEcyImageQueryResultProvider implements InlineQueryResultProvider {
         List<InlineKeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(row);
 
-        //InlineQueryResultCachedPhoto
         InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
                 .keyboard(keyboard)
                 .build();
-        // 构造一个可点击的用户名字符串，使用 Markdown 格式。通过tg://user?id=用户ID链接到用户详情页
-        String fullName = inlineQuery.getFrom().getFirstName() +
-                (inlineQuery.getFrom().getLastName() == null ? "" : inlineQuery.getFrom().getLastName());
-        String clickableUsername = "[" + fullName + "](tg://user?id=" + inlineQuery.getFrom().getId() + ")";
+
 
         return InlineQueryResultPhoto.builder()
                 .id(getSortId())
                 .photoUrl(imageUrl)
                 .thumbnailUrl(imageUrl)
-                .title("随机ecy")
-                .caption("可爱的 " + clickableUsername)
-                .parseMode("markdown")
+                .title("随机二次元")
                 .replyMarkup(markup)
                 .build();
     }

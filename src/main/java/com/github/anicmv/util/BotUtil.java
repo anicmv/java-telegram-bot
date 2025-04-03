@@ -71,10 +71,10 @@ public class BotUtil {
         }
         SendPhoto sendPhoto = sendPhotoBuilder.build();
         Message message = client.execute(sendPhoto);
-        return getTelegramFileId(client, sendPhoto, message, config);
+        return getTelegramFileId(client, message, config);
     }
 
-    private static String getTelegramFileId(TelegramClient client, SendPhoto sendPhoto, Message message, BotConfig config) throws TelegramApiException {
+    private static String getTelegramFileId(TelegramClient client, Message message, BotConfig config) throws TelegramApiException {
         Optional<PhotoSize> photoSizeOptional = message.getPhoto().stream().max(Comparator.comparing(PhotoSize::getFileSize));
         String fileId = photoSizeOptional.map(PhotoSize::getFileId).orElse(null);
         if (fileId != null) {
@@ -90,6 +90,6 @@ public class BotUtil {
                 .build();
 
         Message message = client.execute(sendPhoto);
-        return getTelegramFileId(client, sendPhoto, message, config);
+        return getTelegramFileId(client, message, config);
     }
 }
