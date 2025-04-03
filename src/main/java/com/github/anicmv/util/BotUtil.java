@@ -2,15 +2,26 @@ package com.github.anicmv.util;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.github.anicmv.config.BotConfig;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.io.File;
 import java.io.InputStream;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author anicmv
@@ -42,25 +53,41 @@ public class BotUtil {
     }
 
 
-    public static Optional<PartialBotApiMethod<?>> getOptionalEditMessageMedia(CallbackQuery callbackQuery, InputMediaPhoto inputMediaPhoto) {
-        EditMessageMedia editMessageMedia;
-        if (callbackQuery.getMessage() != null) {
-            Long chatId = callbackQuery.getMessage().getChatId();
-            Integer messageId = callbackQuery.getMessage().getMessageId();
-            editMessageMedia = EditMessageMedia.builder()
-                    .chatId(chatId)
-                    .messageId(messageId)
-                    .media(inputMediaPhoto)
-                    .build();
-        } else if (callbackQuery.getInlineMessageId() != null) {
-            String inlineMessageId = callbackQuery.getInlineMessageId();
-            editMessageMedia = EditMessageMedia.builder()
-                    .inlineMessageId(inlineMessageId)
-                    .media(inputMediaPhoto)
-                    .build();
-        } else {
-            return Optional.empty();
-        }
+    public static Optional<PartialBotApiMethod<?>> getOptionalEditMessageMedia(ChosenInlineQuery chosenInlineQuery, InputMediaPhoto inputMediaPhoto) {
+        String inlineMessageId = chosenInlineQuery.getInlineMessageId();
+        EditMessageMedia editMessageMedia = EditMessageMedia.builder()
+                .inlineMessageId(inlineMessageId)
+                .media(inputMediaPhoto)
+                .build();
         return Optional.of(editMessageMedia);
+    }
+
+    public static String getTelegramFileId(String urlOrPath, TelegramClient client, BotConfig config) throws TelegramApiException {
+        SendPhoto.SendPhotoBuilder<?, ?> sendPhotoBuilder = SendPhoto.builder().chatId(config.getChannelId());
+        if (urlOrPath.startsWith("http")) {
+            sendPhotoBuilder.photo(new InputFile(urlOrPath));
+        } else {
+            sendPhotoBuilder.photo(new InputFile(new File(urlOrPath)));
+        }
+        Message message = client.execute(sendPhotoBuilder.build());
+
+        Optional<PhotoSize> photoSizeOptional = message.getPhoto().stream().max(Comparator.comparing(PhotoSize::getFileSize));
+        return photoSizeOptional.map(PhotoSize::getFileId).orElse(null);
+    }
+
+    public static String getTelegramFileId(InputStream inputStream, TelegramClient client, BotConfig config) throws TelegramApiException {
+        SendPhoto sendPhoto = SendPhoto.builder()
+                .chatId(config.getChannelId())
+                .photo(new InputFile(inputStream, UUID.randomUUID().toString()))
+                .build();
+
+        Message message = client.execute(sendPhoto);
+
+        Optional<PhotoSize> photoSizeOptional = message.getPhoto().stream().max(Comparator.comparing(PhotoSize::getFileSize));
+        String fileId = photoSizeOptional.map(PhotoSize::getFileId).orElse(null);
+        if (fileId != null) {
+            client.execute(SendMessage.builder().chatId(config.getChannelId()).text(fileId).build());
+        }
+        return fileId;
     }
 }

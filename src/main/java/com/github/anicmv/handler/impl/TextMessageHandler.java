@@ -1,11 +1,13 @@
 package com.github.anicmv.handler.impl;
 
 import com.github.anicmv.command.BotCommand;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.handler.UpdateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +33,7 @@ public class TextMessageHandler implements UpdateHandler {
     }
 
     @Override
-    public Optional<PartialBotApiMethod<?>> handle(Update update) {
+    public Optional<PartialBotApiMethod<?>> handle(Update update, TelegramClient client, BotConfig config) {
         String text = update.getMessage().getText().trim();
 
         Optional<BotCommand> commandOpt = botCommands.stream()

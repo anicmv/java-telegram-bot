@@ -1,6 +1,7 @@
 package com.github.anicmv.handler.impl;
 
 import com.github.anicmv.callback.CallbackQueryProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.handler.UpdateHandler;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMet
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,11 +38,11 @@ public class CallbackQueryHandler implements UpdateHandler {
     }
 
     @Override
-    public Optional<PartialBotApiMethod<?>> handle(Update update) {
+    public Optional<PartialBotApiMethod<?>> handle(Update update, TelegramClient client, BotConfig config) throws TelegramApiException {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         for (CallbackQueryProvider provider : providers) {
             if (provider.supports(callbackQuery)) {
-                Optional<PartialBotApiMethod<?>> result = provider.handle(update);
+                Optional<PartialBotApiMethod<?>> result = provider.handle(update, client, config);
                 if (result.isPresent() && result.get() instanceof EditMessageMedia) {
                     return result;
                 }

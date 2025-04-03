@@ -17,4 +17,5 @@ import org.springframework.context.annotation.Configuration;
 public class BotConfig {
     private String token;
     private String username;
+    private String channelId;
 }

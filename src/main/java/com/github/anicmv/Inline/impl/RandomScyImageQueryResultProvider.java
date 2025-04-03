@@ -31,7 +31,7 @@ class RandomScyImageQueryResultProvider implements InlineQueryResultProvider {
         String imageUrl = "https://jpg.moe/i/yj9rnewl.jpeg";
         // 同时附加内联键盘按钮实现交互
         InlineKeyboardButton button = InlineKeyboardButton.builder()
-                .text("随机scy")
+                .text("别急马上就到")
                 .callbackData(BotConstant.CALLBACK_RANDOM_SCY)
                 .build();
 

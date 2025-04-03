@@ -31,7 +31,7 @@ class RandomEcyImageQueryResultProvider implements InlineQueryResultProvider {
         String imageUrl = "https://jpg.moe/i/4rtnoeo1.jpeg";
         // 同时附加内联键盘按钮实现交互
         InlineKeyboardButton button = InlineKeyboardButton.builder()
-                .text("随机ecy")
+                .text("别急马上就到")
                 .callbackData(BotConstant.CALLBACK_RANDOM_ECY)
                 .build();
 
@@ -40,6 +40,7 @@ class RandomEcyImageQueryResultProvider implements InlineQueryResultProvider {
         List<InlineKeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(row);
 
+        //InlineQueryResultCachedPhoto
         InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
                 .keyboard(keyboard)
                 .build();
@@ -53,7 +54,7 @@ class RandomEcyImageQueryResultProvider implements InlineQueryResultProvider {
                 .photoUrl(imageUrl)
                 .thumbnailUrl(imageUrl)
                 .title("随机ecy")
-                .caption("可爱的 " + clickableUsername + "\n涩图\uD83D\uDC47点击即送!")
+                .caption("可爱的 " + clickableUsername)
                 .parseMode("markdown")
                 .replyMarkup(markup)
                 .build();

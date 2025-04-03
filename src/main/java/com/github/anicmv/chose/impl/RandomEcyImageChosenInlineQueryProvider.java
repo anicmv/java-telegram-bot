@@ -1,16 +1,17 @@
-package com.github.anicmv.callback.impl;
+package com.github.anicmv.chose.impl;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.github.anicmv.callback.CallbackQueryProvider;
+import com.github.anicmv.chose.ChosenInlineQueryProvider;
 import com.github.anicmv.config.BotConfig;
+import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.util.BotUtil;
 import com.github.anicmv.util.HttpUtil;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -22,20 +23,19 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
-
 /**
  * @author anicmv
  * @date 2025/3/30 00:48
- * @description 随机图片
+ * @description 二次元随机图片
  */
-@Slf4j
+@Log4j2
 @Component
-public class RandomEcyImageCallbackQueryProvider implements CallbackQueryProvider {
+public class RandomEcyImageChosenInlineQueryProvider implements ChosenInlineQueryProvider {
 
     @Override
-    public boolean supports(CallbackQuery callbackQuery) {
-        //return BotConstant.CALLBACK_RANDOM_ECY.equals(callbackQuery.getData());
-        return false;
+    public boolean supports(ChosenInlineQuery chosenInlineQuery) {
+        // 内联菜单的id
+        return BotConstant.N_1.equals(chosenInlineQuery.getResultId());
     }
 
     @Override
@@ -105,4 +105,6 @@ public class RandomEcyImageCallbackQueryProvider implements CallbackQueryProvide
         JSONObject data = JSONUtil.parseObj(dataJson);
         return data.getStr("data");
     }
+
+
 }

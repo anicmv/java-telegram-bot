@@ -67,11 +67,7 @@
 <!--            <artifactId>telegrambots-extensions</artifactId>-->
 <!--            <version>7.2.0</version>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.telegram</groupId>-->
-<!--            <artifactId>telegrambots-longpolling</artifactId>-->
-<!--            <version>7.2.0</version>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>

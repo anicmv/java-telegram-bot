@@ -2,6 +2,7 @@ package com.github.anicmv.handler.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.handler.UpdateHandler;
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMet
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.Comparator;
 import java.util.List;
@@ -40,7 +42,7 @@ public class InlineQueryHandler implements UpdateHandler {
 
 
     @Override
-    public Optional<PartialBotApiMethod<?>> handle(Update update) {
+    public Optional<PartialBotApiMethod<?>> handle(Update update, TelegramClient client, BotConfig config) {
         InlineQuery inlineQuery = update.getInlineQuery();
         String query = inlineQuery.getQuery();
 
@@ -56,7 +58,7 @@ public class InlineQueryHandler implements UpdateHandler {
         AnswerInlineQuery answer = AnswerInlineQuery.builder()
                 .inlineQueryId(inlineQuery.getId())
                 .results(results)
-                .cacheTime(1)
+                .cacheTime(10)
                 .build();
 
         return Optional.of(answer);

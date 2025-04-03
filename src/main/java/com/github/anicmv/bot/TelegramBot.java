@@ -50,7 +50,7 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
     @Override
     public void consume(Update update) {
         try {
-            PartialBotApiMethod<?> method = updateDispatcher.dispatch(update).orElse(null);
+            PartialBotApiMethod<?> method = updateDispatcher.dispatch(update, telegramClient, botConfig).orElse(null);
             switch (method) {
                 case BotApiMethod<?> botApiMethod -> telegramClient.execute(botApiMethod);
                 case EditMessageMedia editMessageMedia -> telegramClient.execute(editMessageMedia);
