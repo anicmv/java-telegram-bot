@@ -16,6 +16,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "bot")
 public class BotConfig {
     private String token;
-    private String username;
     private String channelId;
 }
