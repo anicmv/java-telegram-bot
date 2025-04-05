@@ -26,11 +26,11 @@ public class HelpCommand implements BotCommand {
                 Available commands:
                     /help   - 帮助
                     /ping   - 存活测试
-                    /fadian - 发癫
+                    /fd - 发癫
                     /diss   - diss
                     /biss   - biss
                     /kfc    - kfc文案
-                    /moyu   - 摸鱼日历
+                    /my   - 摸鱼日历
                 """;
 
         return SendMessage.builder()

@@ -68,7 +68,7 @@ public class BotUtil {
     }
 
     // 辅助方法：将字符串中的 MarkdownV2 特殊字符转义
-    private static String escapeMarkdownV2(String text) {
+    public static String escapeMarkdownV2(String text) {
         return text
                 .replace("\\", "\\\\")
                 .replace("_", "\\_")
@@ -87,7 +87,7 @@ public class BotUtil {
                 .replace("|", "\\|")
                 .replace("{", "\\{")
                 .replace("}", "\\}")
-                .replace(".", "\\.")
+                //.replace(".", "\\.")
                 .replace("!", "\\!");
     }
 
