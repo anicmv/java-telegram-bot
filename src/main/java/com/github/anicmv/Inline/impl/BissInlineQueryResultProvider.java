@@ -39,7 +39,7 @@ public class BissInlineQueryResultProvider implements InlineQueryResultProvider 
                 ? biss.getContent()
                 : "没有找到吐槽内容哦！";
 
-        String imageUrl = "https://jpg.moe/i/bqi5ui3r.jpeg";
+        String imageUrl = "https://jpg.moe/i/e0h3qgb4.jpeg";
         InputTextMessageContent content = InputTextMessageContent.builder()
                 .messageText(text)
                 .build();

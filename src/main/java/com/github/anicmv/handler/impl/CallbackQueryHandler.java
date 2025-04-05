@@ -15,6 +15,9 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author anicmv
@@ -24,6 +27,9 @@ import java.util.Optional;
 @Log4j2
 @Component
 public class CallbackQueryHandler implements UpdateHandler {
+
+    // 使用 ConcurrentHashMap 存储每个用户的锁 (key: Telegram user id) (不起作用
+    private static final ConcurrentMap<Long, ReentrantLock> USER_LOCKS = new ConcurrentHashMap<>();
 
     private final List<CallbackQueryProvider> providers;
 
@@ -40,15 +46,33 @@ public class CallbackQueryHandler implements UpdateHandler {
     @Override
     public Optional<PartialBotApiMethod<?>> handle(Update update, TelegramClient client, BotConfig config) throws TelegramApiException {
         CallbackQuery callbackQuery = update.getCallbackQuery();
-        for (CallbackQueryProvider provider : providers) {
-            if (provider.supports(callbackQuery)) {
-                Optional<PartialBotApiMethod<?>> result = provider.handle(update, client, config);
-                if (result.isPresent() && result.get() instanceof EditMessageMedia) {
-                    return result;
+        long userId = callbackQuery.getFrom().getId();
+
+        // 为当前用户获取一个锁对象
+        ReentrantLock lock = USER_LOCKS.computeIfAbsent(userId, id -> new ReentrantLock());
+
+        lock.lock();
+        try {
+            for (CallbackQueryProvider provider : providers) {
+                if (provider.supports(callbackQuery)) {
+                    Optional<PartialBotApiMethod<?>> result = provider.handle(update, client, config);
+                    if (result.isPresent() && result.get() instanceof EditMessageMedia) {
+                        return result;
+                    }
                 }
             }
+            return Optional.empty();
+        } finally {
+            // 处理完成后释放锁
+            lock.unlock();
+            USER_LOCKS.compute(userId, (key, currentLock) -> {
+                if (currentLock != null && !currentLock.isLocked() && !currentLock.hasQueuedThreads()) {
+                    return null;
+                }
+                return currentLock;
+            });
+            USER_LOCKS.remove(userId, lock);
         }
-        return Optional.empty();
     }
 
 }

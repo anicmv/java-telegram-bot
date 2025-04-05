@@ -25,7 +25,7 @@ public class KfcInlineQueryResultProvider implements InlineQueryResultProvider {
     @Override
     public InlineQueryResult createResult(InlineQuery inlineQuery) {
 
-        String imageUrl = "https://jpg.moe/i/vfgh1bfq.png";
+        String imageUrl = "https://jpg.moe/i/zwbsy5a9.png";
         InputTextMessageContent content = InputTextMessageContent.builder()
                 .messageText(BotUtil.kfc())
                 .build();

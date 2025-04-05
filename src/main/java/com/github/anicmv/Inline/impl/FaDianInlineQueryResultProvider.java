@@ -34,7 +34,7 @@ public class FaDianInlineQueryResultProvider implements InlineQueryResultProvide
     @Override
     public InlineQueryResult createResult(InlineQuery inlineQuery) {
         String text = "食用:关键词'fd'+空格+昵称 -> 点击发癫";
-        String imageUrl = "https://jpg.moe/i/6kn76jj7.webp";
+        String imageUrl = "https://jpg.moe/i/1cxza9wy.webp";
         String query = inlineQuery.getQuery();
 
         InputTextMessageContent.InputTextMessageContentBuilder<?, ?> builder = InputTextMessageContent.builder();

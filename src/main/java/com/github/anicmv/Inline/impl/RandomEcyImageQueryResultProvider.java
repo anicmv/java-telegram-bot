@@ -28,7 +28,7 @@ class RandomEcyImageQueryResultProvider implements InlineQueryResultProvider {
 
     @Override
     public InlineQueryResult createResult(InlineQuery inlineQuery) {
-        String imageUrl = "https://jpg.moe/i/4rtnoeo1.jpeg";
+        String imageUrl = "https://jpg.moe/i/rp8dpcn2.jpeg";
 
         String fullName = inlineQuery.getFrom().getFirstName() +
                 (inlineQuery.getFrom().getLastName() == null ? "" : inlineQuery.getFrom().getLastName());

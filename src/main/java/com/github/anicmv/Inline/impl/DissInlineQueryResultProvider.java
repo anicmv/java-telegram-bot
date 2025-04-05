@@ -39,7 +39,7 @@ public class DissInlineQueryResultProvider implements InlineQueryResultProvider 
                 ? diss.getContent()
                 : "没有找到吐槽内容哦！";
 
-        String imageUrl = "https://jpg.moe/i/cjyg088j.webp";
+        String imageUrl = "https://jpg.moe/i/pyzx542e.webp";
         InputTextMessageContent content = InputTextMessageContent.builder()
                 .messageText(text)
                 .build();

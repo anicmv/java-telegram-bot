@@ -19,6 +19,11 @@ public class BotConstant {
     public static final String CALLBACK_RANDOM_ECY = "RANDOM_ECY";
     public static final String CALLBACK_RANDOM = "RANDOM";
     public static final String CALLBACK_RANDOM_SCY = "RANDOM_SCY";
+    public static final String CALLBACK_XP_JK = "XP_JK";
+    public static final String CALLBACK_XP_HS = "XP_HS";
+    public static final String CALLBACK_XP_BS = "XP_BS";
+    public static final String CALLBACK_XP_TWIN_TAIL = "XP_TWIN_TAIL";
+    public static final String CALLBACK_XP_DEFAULT= "XP_DEFAULT";
 
 
     // 随机ecy

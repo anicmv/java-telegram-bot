@@ -3,11 +3,13 @@ package com.github.anicmv.util;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.github.anicmv.config.BotConfig;
+import com.github.anicmv.contant.XpEnum;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
@@ -58,6 +60,57 @@ public class BotUtil {
         EditMessageMedia editMessageMedia = EditMessageMedia.builder()
                 .inlineMessageId(inlineMessageId)
                 .media(inputMediaPhoto)
+                .build();
+        return Optional.of(editMessageMedia);
+    }
+
+    // 辅助方法：将字符串中的 MarkdownV2 特殊字符转义
+    private static String escapeMarkdownV2(String text) {
+        return text
+                .replace("\\", "\\\\")
+                .replace("_", "\\_")
+                .replace("*", "\\*")
+                .replace("[", "\\[")
+                .replace("]", "\\]")
+                .replace("(", "\\(")
+                .replace(")", "\\)")
+                .replace("~", "\\~")
+                .replace("`", "\\`")
+                .replace(">", "\\>")
+                .replace("#", "\\#")
+                .replace("+", "\\+")
+                .replace("-", "\\-")
+                .replace("=", "\\=")
+                .replace("|", "\\|")
+                .replace("{", "\\{")
+                .replace("}", "\\}")
+                .replace(".", "\\.")
+                .replace("!", "\\!");
+    }
+
+    public static Optional<PartialBotApiMethod<?>> getOptionalEditMessageMedia(CallbackQuery callbackQuery, InputMediaPhoto inputMediaPhoto, String xp) {
+        String inlineMessageId = callbackQuery.getInlineMessageId();
+        String fullName = callbackQuery.getFrom().getFirstName() +
+                (callbackQuery.getFrom().getLastName() == null ? "" : callbackQuery.getFrom().getLastName());
+        // 将全名转义（MarkdownV2 格式）
+        String escapedFullName = escapeMarkdownV2(fullName);
+        String clickableUsername = "[" + escapedFullName + "](tg://user?id=" + callbackQuery.getFrom().getId() + ")";
+
+        // 其余文本同样需要转义（如果有特殊字符）
+        String extraText = " 的xp是: " + XpEnum.fromCallback(xp).getDescription();
+        // 如果extraText中可能包含特殊字符，也应调用 escapeMarkdownV2(extraText)
+        String escapedExtraText = escapeMarkdownV2(extraText);
+
+        String caption = clickableUsername + escapedExtraText;
+        InputMediaPhoto inputMediaPhotoWithCaption = InputMediaPhoto.builder()
+                .media(inputMediaPhoto.getMedia())
+                .caption(caption)
+                .parseMode("Markdown")
+                .build();
+
+        EditMessageMedia editMessageMedia = EditMessageMedia.builder()
+                .inlineMessageId(inlineMessageId)
+                .media(inputMediaPhotoWithCaption)
                 .build();
         return Optional.of(editMessageMedia);
     }
