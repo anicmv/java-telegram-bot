@@ -19,7 +19,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
@@ -125,6 +128,24 @@ public class BotUtil {
         SendPhoto sendPhoto = sendPhotoBuilder.build();
         Message message = client.execute(sendPhoto);
         return getTelegramFileId(client, message, config);
+    }
+
+
+    private String resolveRedirectUrl(String url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        // 不自动跟随重定向
+        connection.setInstanceFollowRedirects(false);
+        int statusCode = connection.getResponseCode();
+        // 判断是否重定向
+        if (statusCode == HttpURLConnection.HTTP_MOVED_PERM ||
+                statusCode == HttpURLConnection.HTTP_MOVED_TEMP ||
+                statusCode == HttpURLConnection.HTTP_SEE_OTHER) {
+            String redirectUrl = connection.getHeaderField("Location");
+            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                return redirectUrl;
+            }
+        }
+        return url;
     }
 
     private static String getTelegramFileId(TelegramClient client, Message message, BotConfig config) throws TelegramApiException {

@@ -13,8 +13,10 @@ public enum XpEnum {
     XP_JK(BotConstant.CALLBACK_XP_JK, "JK"),
     XP_HS(BotConstant.CALLBACK_XP_HS, "黑丝"),
     XP_BS(BotConstant.CALLBACK_XP_BS, "白丝"),
-    XP_TWIN_TAIL(BotConstant.CALLBACK_XP_TWIN_TAIL, "双马尾"),
-    XP_DEFAULT(BotConstant.CALLBACK_XP_DEFAULT, "妹子");
+    //XP_TWIN_TAIL(BotConstant.CALLBACK_XP_TWIN_TAIL, "双马尾"),
+    XP_DEFAULT(BotConstant.CALLBACK_XP_DEFAULT, "妹子"),
+    XP_XZ(BotConstant.CALLBACK_XP_XZ, "写真")
+    ;
 
     private final String callback;
     private final String description;

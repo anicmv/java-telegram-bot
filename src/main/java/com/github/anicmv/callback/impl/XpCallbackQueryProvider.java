@@ -57,7 +57,7 @@ public class XpCallbackQueryProvider implements CallbackQueryProvider {
             default -> new String[]{"https://acg.suyanw.cn/meizi/random.php",};
         };
 
-        String url = directUrl[0];
+        String url = BotUtil.randomUrl(directUrl);
         return BotUtil.getTelegramFileId(url, client, config);
     }
 
@@ -66,10 +66,11 @@ public class XpCallbackQueryProvider implements CallbackQueryProvider {
      */
     private String getImage(TelegramClient client, BotConfig config, String xp) throws TelegramApiException {
         String[] directUrl = switch (xp) {
-            case BotConstant.CALLBACK_XP_JK -> new String[]{"https://api.suyanw.cn/api/jk/", "https://jpg.moe/xp/jk",};
+            case BotConstant.CALLBACK_XP_JK -> new String[]{"https://api.suyanw.cn/api/jk/",
+                    //"https://jpg.moe/xp/jk",
+            };
             case BotConstant.CALLBACK_XP_HS -> new String[]{"https://api.suyanw.cn/api/hs/",};
-            case BotConstant.CALLBACK_XP_TWIN_TAIL -> new String[]{"https://jpg.moe/xp/双马尾",};
-            default -> new String[]{"https://jpg.moe/xp/girl",};
+            default -> new String[]{"https://jpg.moe/xp/写真",};
         };
 
         try (InputStream inputStream = BotUtil.randomImageInputStream(directUrl)) {
