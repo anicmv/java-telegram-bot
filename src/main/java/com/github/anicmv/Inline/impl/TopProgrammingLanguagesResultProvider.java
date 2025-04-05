@@ -52,7 +52,6 @@ public class TopProgrammingLanguagesResultProvider implements InlineQueryResultP
 
         Path filePath = null;
         if (resource != null) {
-            log.info("资源存在");
             // 若资源存在，判断协议是否为 file
             if ("file".equals(resource.getProtocol())) {
                 try {
@@ -64,7 +63,6 @@ public class TopProgrammingLanguagesResultProvider implements InlineQueryResultP
         }
         // 如果 filePath 为空，则使用相对路径：src/main/resources/programmer/filename
         if (filePath == null) {
-            log.info("filepath不存在");
             filePath = Paths.get("src/main/resources", resourcePath);
         }
 
@@ -79,7 +77,6 @@ public class TopProgrammingLanguagesResultProvider implements InlineQueryResultP
                 log.error(e.getMessage());
             }
         } else {
-            log.info("文件不存在");
             // 文件不存在则调用 topProgrammer() 方法生成字符串内容
             programmerTxt = topProgrammer();
             if (programmerTxt == null) {

@@ -49,7 +49,10 @@ public class InlineQueryHandler implements UpdateHandler {
          List<InlineQueryResult> results = resultProviders.stream()
                 .filter(provider -> {
                     // 如果查询不为空，则只保留 sortId 等于 BotConstant.N_3 的 provider，否则全部保留
-                    return StrUtil.isEmpty(query) || BotConstant.N_3.equals(provider.getSortId());
+                    return StrUtil.isEmpty(query)
+                            || (query.startsWith("fd") && BotConstant.N_3.equals(provider.getSortId()))
+                            || ((query.startsWith("gm") || query.startsWith("rm")) && BotConstant.N_9.equals(provider.getSortId())
+                    );
                 })
                 .sorted(Comparator.comparing(InlineQueryResultProvider::getSortId))
                 .map(provider -> provider.createResult(inlineQuery))
