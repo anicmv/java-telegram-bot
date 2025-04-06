@@ -28,7 +28,7 @@ public class BotConstant {
     public static final String CALLBACK_XP_GIRL = "XP_GIRL";
     public static final String CALLBACK_DEEP_SEEK = "DEEP_SEEK";
     public static final String CALLBACK_BILI_GM = "BILI_GM";
-    public static final String CALLBACK_BILI_RM = "BILI_GM";
+    public static final String CALLBACK_BILI_RM = "BILI_RM";
     public static final String CALLBACK_BILI = "BILI_CALLBACK";
 
 

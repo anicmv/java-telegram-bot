@@ -132,7 +132,7 @@ public class BotUtil {
         InputMediaPhoto inputMediaPhotoWithCaption = InputMediaPhoto.builder()
                 .media(inputMediaPhoto.getMedia())
                 .caption(caption)
-                .parseMode("Markdown")
+                .parseMode("MarkdownV2")
                 .build();
 
         EditMessageMedia editMessageMedia = EditMessageMedia.builder()
