@@ -21,6 +21,8 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author anicmv
@@ -37,6 +39,8 @@ public class DeepSeekChosenInlineQueryProvider implements ChosenInlineQueryProvi
     @Resource
     private DeepSeekClient deepSeekClient;
 
+    // 线程池字段，用于异步执行 deepSeek 请求
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     @Override
     public boolean supports(ChosenInlineQuery chosenInlineQuery) {
@@ -47,22 +51,42 @@ public class DeepSeekChosenInlineQueryProvider implements ChosenInlineQueryProvi
     @Override
     public Optional<PartialBotApiMethod<?>> handle(Update update, TelegramClient client, BotConfig config) throws TelegramApiException {
         ChosenInlineQuery chosenInlineQuery = update.getChosenInlineQuery();
+
+        // 获取用户输入
         String query = chosenInlineQuery.getQuery();
         List<String> parts = StrUtil.split(query, ' ', 2);
         String prompt = parts.getLast();
 
-        ChatCompletionRequest request = ChatCompletionRequest.builder()
-                // 根据渠道模型名称动态修改这个参数
-                .model(deepSeekProperties.getModel())
-                .addUserMessage(prompt).build();
+        // 异步调用 deepSeek 接口
+        executorService.submit(() -> {
+            try {
+                ChatCompletionRequest request = ChatCompletionRequest.builder()
+                        // 根据渠道模型名称动态修改这个参数
+                        .model(deepSeekProperties.getModel())
+                        .addUserMessage(prompt)
+                        .build();
 
-        ChatCompletionResponse response = deepSeekClient.chatCompletion(request).execute();
+                ChatCompletionResponse response = deepSeekClient.chatCompletion(request).execute();
+                String content = response.choices().getFirst().message().content();
 
-        String content = response.choices().getFirst().message().content();
-        return getOptionalEditMessageText(chosenInlineQuery, content);
+                // 构造更新后的消息
+                Optional<PartialBotApiMethod<?>> updatedResponse = getOptionalEditMessageText(chosenInlineQuery, content);
+                // 通过 Telegram 客户端异步调用更新消息接口
+                updatedResponse.ifPresent(method -> {
+                    try {
+                        client.execute((EditMessageText) method);
+                    } catch (TelegramApiException e) {
+                        log.error("Failed to update message", e);
+                    }
+                });
+            } catch (Exception e) {
+                log.error("DeepSeek asynchronous processing failed", e);
+            }
+        });
 
+        // 返回初始响应，保证 Telegram 内联查询不超时
+        return Optional.empty();
     }
-
 
     public static Optional<PartialBotApiMethod<?>> getOptionalEditMessageText(ChosenInlineQuery chosenInlineQuery, String content) {
         String inlineMessageId = chosenInlineQuery.getInlineMessageId();
@@ -72,5 +96,6 @@ public class DeepSeekChosenInlineQueryProvider implements ChosenInlineQueryProvi
                 .build();
         return Optional.of(editMessageText);
     }
-
 }
+
+

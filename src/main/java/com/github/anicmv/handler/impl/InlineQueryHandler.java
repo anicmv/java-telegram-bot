@@ -61,7 +61,7 @@ public class InlineQueryHandler implements UpdateHandler {
         AnswerInlineQuery answer = AnswerInlineQuery.builder()
                 .inlineQueryId(inlineQuery.getId())
                 .results(results)
-                .cacheTime(10)
+                .cacheTime(60)
                 .build();
 
         return Optional.of(answer);
