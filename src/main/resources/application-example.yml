@@ -11,6 +11,11 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-
 bot:
-  token: you_bot_token
+  token: your_telegram_token
+  channelId: your_channel_id
+
+deepseek:
+  api-key: your_deepseek_api_key
+  model: deepseek-reasoner
+  base-url: https://api.deepseek.com
