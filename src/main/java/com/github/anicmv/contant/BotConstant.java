@@ -26,24 +26,33 @@ public class BotConstant {
     public static final String CALLBACK_XP_TWIN_TAIL = "XP_TWIN_TAIL";
     public static final String CALLBACK_XP_DEFAULT = "XP_DEFAULT";
     public static final String CALLBACK_XP_GIRL = "XP_GIRL";
+    public static final String CALLBACK_DEEP_SEEK = "DEEP_SEEK";
+    public static final String CALLBACK_BILI_GM = "BILI_GM";
+    public static final String CALLBACK_BILI_RM = "BILI_GM";
+    public static final String CALLBACK_BILI = "BILI_CALLBACK";
 
 
     // 随机ecy
     public static final String N_1 = "1";
 
     public static final String N_2 = "2";
-    // fadian
+    // deepseek
     public static final String N_3 = "3";
-    // biss
+    // bilibili
     public static final String N_4 = "4";
     // diss
     public static final String N_5 = "5";
-    // kfc
+
     public static final String N_6 = "6";
-    // 文章示例
-    public static final String N_99 = "99";
+    // kfc
+    public static final String N_7 = "7";
+
     // 摸鱼
     public static final String N_8 = "8";
     // 天气
     public static final String N_9 = "9";
+    public static final String N_10 = "10";
+
+    // 文章示例
+    public static final String N_99 = "99";
 }

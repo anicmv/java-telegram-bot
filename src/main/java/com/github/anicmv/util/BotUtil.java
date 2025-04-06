@@ -87,9 +87,33 @@ public class BotUtil {
                 .replace("|", "\\|")
                 .replace("{", "\\{")
                 .replace("}", "\\}")
-                //.replace(".", "\\.")
+                .replace(".", "\\.")
                 .replace("!", "\\!");
     }
+
+    public static String removeMarkdownV2(String text) {
+        return text.replace("\\", "")
+                .replace("_", "")
+                .replace("*", "")
+                .replace("[", "")
+                .replace("]", "")
+                .replace("(", "")
+                .replace(")", "")
+                .replace("~", "")
+                .replace("`", "")
+                .replace(">", "")
+                .replace("#", "")
+                .replace("+", "")
+                .replace("-", "")
+                .replace("=", "")
+                .replace("|", "")
+                .replace("{", "")
+                .replace("}", "")
+                .replace(".", "")
+                .replace("!", "");
+    }
+
+
 
     public static Optional<PartialBotApiMethod<?>> getOptionalEditMessageMedia(CallbackQuery callbackQuery, InputMediaPhoto inputMediaPhoto, String xp) {
         String inlineMessageId = callbackQuery.getInlineMessageId();

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -28,7 +29,8 @@ public class MoYuCommand implements BotCommand {
 
     @Override
     public SendPhoto execute(Update update) {
-        long chatId = update.getMessage().getChatId();
+        Message message = update.getMessage();
+        long chatId = message.getChatId();
 
         InputStream photo = HttpUtil.getInputStream(getImageUrl(), Map.of());
         if (photo == null) {
@@ -40,6 +42,7 @@ public class MoYuCommand implements BotCommand {
 
         return SendPhoto.builder()
                 .chatId(chatId)
+                .replyToMessageId(message.getMessageId())
                 .photo(new InputFile(photo, "moyu.jpg"))
                 .build();
     }

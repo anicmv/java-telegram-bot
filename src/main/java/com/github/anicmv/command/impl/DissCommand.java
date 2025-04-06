@@ -9,6 +9,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 /**
  * @author anicmv
@@ -28,7 +29,9 @@ public class DissCommand implements BotCommand {
 
     @Override
     public SendMessage execute(Update update) {
-        long chatId = update.getMessage().getChatId();
+        Message message = update.getMessage();
+        long chatId = message.getChatId();
+
         // 使用 MyBatis-Plus 通过 LambdaQueryWrapper 的 last 方法添加 ORDER BY RAND() LIMIT 1
         // 注意：该 SQL 语法依赖于具体数据库，如 MySQL 中使用 RAND() 函数
         Diss diss = dissMapper.selectOne(

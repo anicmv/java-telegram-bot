@@ -5,6 +5,7 @@ import com.github.anicmv.contant.BotConstant;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 /**
  * @author anicmv
@@ -21,7 +22,8 @@ public class HelpCommand implements BotCommand {
 
     @Override
     public SendMessage execute(Update update) {
-        long chatId = update.getMessage().getChatId();
+        Message message = update.getMessage();
+        long chatId = message.getChatId();
         String response = """
                 Available commands:
                     /help   - 帮助
@@ -35,6 +37,7 @@ public class HelpCommand implements BotCommand {
 
         return SendMessage.builder()
                 .chatId(chatId)
+                .replyToMessageId(message.getMessageId())
                 .text(response)
                 .build();
     }

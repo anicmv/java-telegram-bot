@@ -35,7 +35,7 @@ public class TopProgrammingLanguagesResultProvider implements InlineQueryResultP
 
     @Override
     public String getSortId() {
-        return BotConstant.N_8;
+        return BotConstant.N_9;
     }
 
     @Override

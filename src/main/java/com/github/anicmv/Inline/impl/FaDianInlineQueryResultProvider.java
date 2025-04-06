@@ -28,7 +28,7 @@ public class FaDianInlineQueryResultProvider implements InlineQueryResultProvide
 
     @Override
     public String getSortId() {
-        return BotConstant.N_3;
+        return BotConstant.N_7;
     }
 
     @Override

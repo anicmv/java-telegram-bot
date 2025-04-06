@@ -7,7 +7,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -55,10 +54,7 @@ public class CallbackQueryHandler implements UpdateHandler {
         try {
             for (CallbackQueryProvider provider : providers) {
                 if (provider.supports(callbackQuery)) {
-                    Optional<PartialBotApiMethod<?>> result = provider.handle(update, client, config);
-                    if (result.isPresent() && result.get() instanceof EditMessageMedia) {
-                        return result;
-                    }
+                    return provider.handle(update, client, config);
                 }
             }
             return Optional.empty();

@@ -33,6 +33,7 @@
         <mybatis-plus.version>3.5.10.1</mybatis-plus.version>
         <mybatis-spring.version>3.0.4</mybatis-spring.version>
         <jsoup.version>1.19.1</jsoup.version>
+        <spring-ai.version>1.0.0-M6</spring-ai.version>
     </properties>
     <dependencies>
         <dependency>
@@ -58,16 +59,6 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.telegram</groupId>-->
-<!--            <artifactId>telegrambots-webhook</artifactId>-->
-<!--            <version>7.2.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.telegram</groupId>-->
-<!--            <artifactId>telegrambots-extensions</artifactId>-->
-<!--            <version>7.2.0</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -105,6 +96,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.pig-mesh.ai</groupId>
+            <artifactId>deepseek-spring-boot-starter</artifactId>
+            <version>1.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
     <build>

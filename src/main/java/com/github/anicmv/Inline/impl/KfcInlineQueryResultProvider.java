@@ -19,7 +19,7 @@ public class KfcInlineQueryResultProvider implements InlineQueryResultProvider {
 
     @Override
     public String getSortId() {
-        return BotConstant.N_6;
+        return BotConstant.N_8;
     }
 
     @Override

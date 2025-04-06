@@ -6,6 +6,7 @@ import com.github.anicmv.util.BotUtil;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 /**
  * @author anicmv
@@ -22,9 +23,11 @@ public class KfcCommand implements BotCommand {
 
     @Override
     public SendMessage execute(Update update) {
-        long chatId = update.getMessage().getChatId();
+        Message message = update.getMessage();
+        long chatId = message.getChatId();
         return SendMessage.builder()
                 .chatId(chatId)
+                .replyToMessageId(message.getMessageId())
                 .text(BotUtil.kfc())
                 .build();
     }

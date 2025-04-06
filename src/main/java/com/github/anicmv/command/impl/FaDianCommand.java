@@ -31,7 +31,8 @@ public class FaDianCommand implements BotCommand {
 
     @Override
     public SendMessage execute(Update update) {
-        long chatId = update.getMessage().getChatId();
+        Message message = update.getMessage();
+        long chatId = message.getChatId();
 
         Message replyToMessage = update.getMessage().getReplyToMessage();
         if (replyToMessage == null) {
@@ -59,6 +60,7 @@ public class FaDianCommand implements BotCommand {
         return SendMessage.builder()
                 .chatId(chatId)
                 .text(StrUtil.replace(text, "{holder}", clickableUsername))
+                .replyToMessageId(message.getMessageId())
                 .parseMode("Markdown")
                 .build();
     }

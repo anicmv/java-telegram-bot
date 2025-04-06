@@ -25,7 +25,7 @@ public class BissInlineQueryResultProvider implements InlineQueryResultProvider 
 
     @Override
     public String getSortId() {
-        return BotConstant.N_4;
+        return BotConstant.N_6;
     }
 
     @Override
