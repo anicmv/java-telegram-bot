@@ -1,8 +1,10 @@
 package com.github.anicmv.command.impl;
 
 import com.github.anicmv.command.BotCommand;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.executor.extend.DeleteMessageExecutor;
+import com.github.anicmv.util.BotUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,11 +22,14 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 public class PingCommand implements BotCommand {
 
     @Resource
+    private BotConfig config;
+
+    @Resource
     private DeleteMessageExecutor deleteMessageExecutor;
 
     @Override
     public boolean supports(String commandText) {
-        return commandText.trim().startsWith(BotConstant.PING);
+        return BotUtil.isThisCommand(BotConstant.PING, commandText.trim(), config);
     }
 
     @Override

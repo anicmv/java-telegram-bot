@@ -190,4 +190,11 @@ public class BotUtil {
         Message message = client.execute(sendPhoto);
         return getTelegramFileId(client, message, config);
     }
+
+    public static boolean isThisCommand(String command, String commandText, BotConfig config) {
+        if (commandText.contains("@")) {
+            return (command + "@" + config.getUsername()).equals(commandText);
+        }
+        return command.equals(commandText);
+    }
 }

@@ -12,6 +12,7 @@ public class BotConstant {
     public static final String KFC = "/kfc";
     public static final String DISS = "/diss";
     public static final String BISS = "/biss";
+    public static final String DEEP_SEEK = "/deepseek";
     public static final String FADIAN = "/fd";
     public static final String MO_YU = "/my";
 

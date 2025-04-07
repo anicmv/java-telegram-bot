@@ -1,8 +1,10 @@
 package com.github.anicmv.command.impl;
 
 import com.github.anicmv.command.BotCommand;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.util.BotUtil;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,9 +18,12 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 @Component
 public class KfcCommand implements BotCommand {
 
+    @Resource
+    private BotConfig config;
+
     @Override
     public boolean supports(String commandText) {
-        return commandText.trim().startsWith(BotConstant.KFC);
+        return BotUtil.isThisCommand(BotConstant.KFC, commandText.trim(), config);
     }
 
     @Override

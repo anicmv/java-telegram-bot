@@ -3,6 +3,7 @@ package com.github.anicmv.command.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.anicmv.command.BotCommand;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.entity.FaDian;
 import com.github.anicmv.mapper.FaDianMapper;
@@ -22,11 +23,14 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 public class FaDianCommand implements BotCommand {
 
     @Resource
+    private BotConfig config;
+
+    @Resource
     private FaDianMapper faDianMapper;
 
     @Override
     public boolean supports(String commandText) {
-        return commandText.trim().startsWith(BotConstant.FADIAN);
+        return BotUtil.isThisCommand(BotConstant.FADIAN, commandText.trim(), config);
     }
 
     @Override

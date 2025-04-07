@@ -2,9 +2,11 @@ package com.github.anicmv.command.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.anicmv.command.BotCommand;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.entity.Diss;
 import com.github.anicmv.mapper.DissMapper;
+import com.github.anicmv.util.BotUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,11 +22,14 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 public class DissCommand implements BotCommand {
 
     @Resource
+    private BotConfig config;
+
+    @Resource
     private DissMapper dissMapper;
 
     @Override
     public boolean supports(String commandText) {
-        return commandText.trim().startsWith(BotConstant.DISS);
+        return BotUtil.isThisCommand(BotConstant.DISS, commandText.trim(), config);
     }
 
     @Override
