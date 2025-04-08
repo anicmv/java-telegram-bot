@@ -1,16 +1,15 @@
 package com.github.anicmv.Inline.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
-import com.github.anicmv.entity.Diss;
 import com.github.anicmv.mapper.DissMapper;
+import com.github.anicmv.util.BotUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * @author anicmv
@@ -29,28 +28,8 @@ public class DissInlineQueryResultProvider implements InlineQueryResultProvider 
     }
 
     @Override
-    public InlineQueryResult createResult(InlineQuery inlineQuery) {
-
-        Diss diss = dissMapper.selectOne(
-                new LambdaQueryWrapper<Diss>().last("ORDER BY RAND() LIMIT 1")
-        );
-
-        String text = (diss != null && diss.getContent() != null)
-                ? diss.getContent()
-                : "没有找到吐槽内容哦！";
-
+    public InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config) {
         String imageUrl = "https://jpg.moe/i/pyzx542e.webp";
-        InputTextMessageContent content = InputTextMessageContent.builder()
-                .messageText(text)
-                .build();
-
-        return InlineQueryResultPhoto.builder()
-                .id(getSortId())
-                .photoUrl(imageUrl)
-                .thumbnailUrl(imageUrl)
-                .title("Diss")
-                .inputMessageContent(content)
-                .build();
-
+        return BotUtil.buildInlineQueryResult(update, config, dissMapper, null, getSortId(), "Diss", imageUrl);
     }
 }

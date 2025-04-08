@@ -19,6 +19,10 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -216,6 +220,50 @@ public class BotUtil {
 
         Message replyToMessage = message.getReplyToMessage();
 
+
+        SendMessage.SendMessageBuilder<?, ?> sendMessageBuilder = SendMessage.builder()
+                .chatId(chatId)
+                .text(getBotText(dissMapper, bissMapper));
+
+        if (replyToMessage != null) {
+            sendMessageBuilder.replyToMessageId(replyToMessage.getMessageId());
+        }
+        return sendMessageBuilder.build();
+    }
+
+    public static InlineQueryResult buildInlineQueryResult(Update update, BotConfig config, DissMapper dissMapper, BissMapper bissMapper, String sortId, String title, String imageUrl) {
+        InlineQuery inlineQuery = update.getInlineQuery();
+        Long id = inlineQuery.getFrom().getId();
+        InputTextMessageContent.InputTextMessageContentBuilder<?, ?> builder = InputTextMessageContent.builder();
+        List<String> whitelist = Arrays.stream(config.getWhitelist().split(",")).toList();
+        if (!whitelist.contains(String.valueOf(id))) {
+            builder.messageText("你不准用！");
+            return InlineQueryResultPhoto.builder()
+                    .id(sortId)
+                    .photoUrl(imageUrl)
+                    .thumbnailUrl(imageUrl)
+                    .title(title)
+                    .inputMessageContent(builder.build())
+                    .build();
+        }
+
+        InputTextMessageContent content = builder
+                .messageText(getBotText(dissMapper, bissMapper))
+                .build();
+
+        return InlineQueryResultPhoto.builder()
+                .id(sortId)
+                .photoUrl(imageUrl)
+                .thumbnailUrl(imageUrl)
+                .title(title)
+                .inputMessageContent(content)
+                .build();
+
+
+    }
+
+
+    public static String getBotText(DissMapper dissMapper, BissMapper bissMapper) {
         String text;
         // 使用 MyBatis-Plus 通过 LambdaQueryWrapper 的 last 方法添加 ORDER BY RAND() LIMIT 1
         // 该 SQL 语法依赖于具体数据库，如 MySQL 中使用 RAND() 函数
@@ -234,15 +282,6 @@ public class BotUtil {
                     ? biss.getContent()
                     : "没有找到吐槽内容哦！";
         }
-
-
-        SendMessage.SendMessageBuilder<?, ?> sendMessageBuilder = SendMessage.builder()
-                .chatId(chatId)
-                .text(text);
-
-        if (replyToMessage != null) {
-            sendMessageBuilder.replyToMessageId(replyToMessage.getMessageId());
-        }
-        return sendMessageBuilder.build();
+        return text;
     }
 }

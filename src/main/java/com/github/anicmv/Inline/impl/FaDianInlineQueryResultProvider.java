@@ -3,15 +3,18 @@ package com.github.anicmv.Inline.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.entity.FaDian;
 import com.github.anicmv.mapper.FaDianMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 
@@ -32,7 +35,8 @@ public class FaDianInlineQueryResultProvider implements InlineQueryResultProvide
     }
 
     @Override
-    public InlineQueryResult createResult(InlineQuery inlineQuery) {
+    public InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config) {
+        InlineQuery inlineQuery = update.getInlineQuery();
         String text = "食用:关键词'fd'+空格+昵称 -> 点击发癫";
         String imageUrl = "https://jpg.moe/i/1cxza9wy.webp";
         String query = inlineQuery.getQuery();

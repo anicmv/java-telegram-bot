@@ -1,7 +1,9 @@
 package com.github.anicmv.Inline;
 
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import com.github.anicmv.config.BotConfig;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * @author anicmv
@@ -20,5 +22,5 @@ public interface InlineQueryResultProvider {
     /**
      * 根据 inline query 请求创建 InlineQueryResult 结果
      */
-    InlineQueryResult createResult(InlineQuery inlineQuery);
+    InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config);
 }

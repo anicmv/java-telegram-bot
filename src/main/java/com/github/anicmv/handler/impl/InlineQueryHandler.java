@@ -13,8 +13,10 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMet
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -42,28 +44,44 @@ public class InlineQueryHandler implements UpdateHandler {
 
 
     @Override
-    public Optional<PartialBotApiMethod<?>> handle(Update update, TelegramClient client, BotConfig config) {
+    public Optional<PartialBotApiMethod<?>> handle(Update update, TelegramClient client, BotConfig config) throws TelegramApiException {
         InlineQuery inlineQuery = update.getInlineQuery();
         String query = inlineQuery.getQuery();
+        Long id = inlineQuery.getFrom().getId();
+        List<String> whitelist = Arrays.stream(config.getWhitelist().split(",")).toList();
 
         List<InlineQueryResult> results = resultProviders.stream()
-                .filter(provider -> {
-                    // 如果查询不为空，则只保留 sortId 等于 BotConstant.N_3 的 provider，否则全部保留
-                    return StrUtil.isEmpty(query)
-                            || (query.startsWith("fd") && BotConstant.N_7.equals(provider.getSortId()))
-                            || (query.startsWith("ds") && BotConstant.N_3.equals(provider.getSortId())
-                    );
-                })
+                .filter(provider -> queryFilter(provider, query))
+                .filter(provider -> whitelistFilter(provider, id, whitelist))
                 .sorted(Comparator.comparing(InlineQueryResultProvider::getSortId))
-                .map(provider -> provider.createResult(inlineQuery))
+                .map(provider -> provider.createResult(update, client, config))
                 .toList();
 
         AnswerInlineQuery answer = AnswerInlineQuery.builder()
                 .inlineQueryId(inlineQuery.getId())
                 .results(results)
-                .cacheTime(60)
+                .cacheTime(1)
                 .build();
 
         return Optional.of(answer);
+    }
+
+    /**
+     * 根据查询内容筛选 provider
+     */
+    private boolean queryFilter(InlineQueryResultProvider provider, String query) {
+        return StrUtil.isEmpty(query)
+                || (query.startsWith("fd") && BotConstant.N_7.equals(provider.getSortId()))
+                || (query.startsWith("ds") && BotConstant.N_3.equals(provider.getSortId()));
+    }
+
+    /**
+     * 对 provider.getSortId() 为 "5" 或 "6" 的结果，判断用户 id 是否在 whitelist 内
+     */
+    private boolean whitelistFilter(InlineQueryResultProvider provider, Long id, List<String> whitelist) {
+        if ("5".equals(provider.getSortId()) || "6".equals(provider.getSortId())) {
+            return whitelist.contains(String.valueOf(id));
+        }
+        return true;
     }
 }

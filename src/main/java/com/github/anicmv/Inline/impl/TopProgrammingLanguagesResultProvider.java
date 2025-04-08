@@ -2,6 +2,7 @@ package com.github.anicmv.Inline.impl;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -9,10 +10,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,7 +41,7 @@ public class TopProgrammingLanguagesResultProvider implements InlineQueryResultP
     }
 
     @Override
-    public InlineQueryResult createResult(InlineQuery inlineQuery) {
+    public InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         String dateStr = sdf.format(new Date());
         String filename = "top-" + dateStr + ".txt";

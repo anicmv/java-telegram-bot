@@ -2,8 +2,10 @@ package com.github.anicmv.Inline.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
@@ -12,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQuery
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,8 @@ public class DeepSeekInlineQueryResultProvider implements InlineQueryResultProvi
     }
 
     @Override
-    public InlineQueryResult createResult(InlineQuery inlineQuery) {
+    public InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config) {
+        InlineQuery inlineQuery = update.getInlineQuery();
         String text = "食用:关键词'ds' + 空格 + prompt -> 点击DeepSeek";
         String imageUrl = "https://jpg.moe/i/bx9jrubq.png";
         String query = inlineQuery.getQuery();

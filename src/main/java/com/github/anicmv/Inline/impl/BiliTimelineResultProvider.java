@@ -1,16 +1,18 @@
 package com.github.anicmv.Inline.impl;
 
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,7 @@ public class BiliTimelineResultProvider implements InlineQueryResultProvider {
     }
 
     @Override
-    public InlineQueryResult createResult(InlineQuery inlineQuery) {
+    public InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config) {
         String imageUrl = "https://jpg.moe/i/hr58gxep.jpeg";
 
         InlineKeyboardButton gmButton = InlineKeyboardButton.builder()

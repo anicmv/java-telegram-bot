@@ -1,15 +1,17 @@
 package com.github.anicmv.Inline.impl;//package com.github.anicmv.Inline.impl;
 
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.contant.XpEnum;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +32,7 @@ class XpQueryResultProvider implements InlineQueryResultProvider {
     }
 
     @Override
-    public InlineQueryResult createResult(InlineQuery inlineQuery) {
+    public InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config) {
         String imageUrl = "https://jpg.moe/i/3eh09458.jpeg";
 
         // 先获取所有枚举实例对应的按钮

@@ -1,13 +1,15 @@
 package com.github.anicmv.Inline.impl;
 
 import com.github.anicmv.Inline.InlineQueryResultProvider;
+import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.util.BotUtil;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * @author anicmv
@@ -23,7 +25,7 @@ public class KfcInlineQueryResultProvider implements InlineQueryResultProvider {
     }
 
     @Override
-    public InlineQueryResult createResult(InlineQuery inlineQuery) {
+    public InlineQueryResult createResult(Update update, TelegramClient client, BotConfig config) {
 
         String imageUrl = "https://jpg.moe/i/zwbsy5a9.png";
         InputTextMessageContent content = InputTextMessageContent.builder()
