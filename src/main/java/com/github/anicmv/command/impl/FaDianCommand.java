@@ -64,8 +64,8 @@ public class FaDianCommand implements BotCommand {
         return SendMessage.builder()
                 .chatId(chatId)
                 .text(StrUtil.replace(text, "{holder}", clickableUsername))
-                .replyToMessageId(message.getMessageId())
-                .parseMode("Markdown")
+                .replyToMessageId(replyToMessage.getMessageId())
+                .parseMode("MarkdownV2")
                 .build();
     }
 }

@@ -2,8 +2,13 @@ package com.github.anicmv.util;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.anicmv.config.BotConfig;
 import com.github.anicmv.contant.XpEnum;
+import com.github.anicmv.entity.Biss;
+import com.github.anicmv.entity.Diss;
+import com.github.anicmv.mapper.BissMapper;
+import com.github.anicmv.mapper.DissMapper;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,6 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
@@ -23,10 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author anicmv
@@ -114,7 +117,6 @@ public class BotUtil {
     }
 
 
-
     public static Optional<PartialBotApiMethod<?>> getOptionalEditMessageMedia(CallbackQuery callbackQuery, InputMediaPhoto inputMediaPhoto, String xp) {
         String inlineMessageId = callbackQuery.getInlineMessageId();
         String fullName = callbackQuery.getFrom().getFirstName() +
@@ -196,5 +198,51 @@ public class BotUtil {
             return (command + "@" + config.getUsername()).equals(commandText);
         }
         return command.equals(commandText);
+    }
+
+
+    public static SendMessage buildSendMessage(Update update, BotConfig config, DissMapper dissMapper, BissMapper bissMapper) {
+        Message message = update.getMessage();
+        Long chatId = message.getChatId();
+        Long id = message.getFrom().getId();
+        List<String> whitelist = Arrays.stream(config.getWhitelist().split(",")).toList();
+        if (!whitelist.contains(String.valueOf(id))) {
+            return SendMessage.builder()
+                    .chatId(chatId)
+                    .replyToMessageId(message.getMessageId())
+                    .text("你不准用！")
+                    .build();
+        }
+
+        Message replyToMessage = message.getReplyToMessage();
+
+        String text;
+        // 使用 MyBatis-Plus 通过 LambdaQueryWrapper 的 last 方法添加 ORDER BY RAND() LIMIT 1
+        // 该 SQL 语法依赖于具体数据库，如 MySQL 中使用 RAND() 函数
+        if (dissMapper != null) {
+            Diss diss = dissMapper.selectOne(
+                    new LambdaQueryWrapper<Diss>().last("ORDER BY RAND() LIMIT 1")
+            );
+            text = (diss != null && diss.getContent() != null)
+                    ? diss.getContent()
+                    : "没有找到吐槽内容哦！";
+        } else {
+            Biss biss = bissMapper.selectOne(
+                    new LambdaQueryWrapper<Biss>().last("ORDER BY RAND() LIMIT 1")
+            );
+            text = (biss != null && biss.getContent() != null)
+                    ? biss.getContent()
+                    : "没有找到吐槽内容哦！";
+        }
+
+
+        SendMessage.SendMessageBuilder<?, ?> sendMessageBuilder = SendMessage.builder()
+                .chatId(chatId)
+                .text(text);
+
+        if (replyToMessage != null) {
+            sendMessageBuilder.replyToMessageId(replyToMessage.getMessageId());
+        }
+        return sendMessageBuilder.build();
     }
 }

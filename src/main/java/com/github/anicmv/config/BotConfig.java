@@ -18,4 +18,5 @@ public class BotConfig {
     private String token;
     private String channelId;
     private String username;
+    private String whitelist;
 }

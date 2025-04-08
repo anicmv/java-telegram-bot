@@ -15,7 +15,7 @@ bot:
   token: your_telegram_token
   channelId: your_channel_id
   username: your_bot_name
-
+  whitelist: your_telegram_id
 deepseek:
   api-key: your_deepseek_api_key
   model: deepseek-reasoner
