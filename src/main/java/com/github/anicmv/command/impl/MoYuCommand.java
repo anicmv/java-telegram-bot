@@ -38,7 +38,7 @@ public class MoYuCommand implements BotCommand {
         Message message = update.getMessage();
         long chatId = message.getChatId();
 
-        InputStream photo = HttpUtil.getInputStream(getImageUrl(), Map.of());
+        InputStream photo = HttpUtil.getInputStream(getImageUrl(), Map.of(BotConstant.UA, BotConstant.USER_AGENT));
         if (photo == null) {
             return SendPhoto.builder()
                     .chatId(chatId)
@@ -58,7 +58,7 @@ public class MoYuCommand implements BotCommand {
      */
     private String getImageUrl() {
         String moYuApi = "https://api.vvhan.com/api/moyu";
-        String redirectUrl = HttpUtil.redirectUrl(moYuApi, Map.of());
+        String redirectUrl = HttpUtil.redirectUrl(moYuApi, Map.of(BotConstant.UA, BotConstant.USER_AGENT));
         if (redirectUrl == null) {
             log.error("Error occurred during redirect URL");
         }

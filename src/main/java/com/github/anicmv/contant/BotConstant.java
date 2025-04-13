@@ -17,6 +17,14 @@ public class BotConstant {
     public static final String MO_YU = "/my";
 
 
+    public static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
+    public static final String UA = "User-Agent";
+    public static final String AE = "Accept-Encoding";
+    public static final String CE = "Content-Encoding";
+    public static final String COOKIE = "Cookie";
+    public static final String REFERER = "Referer";
+    public static final String KFC_REFERER = "https://kfc.shadiao.pro/";
+
     public static final String CALLBACK_RANDOM_ECY = "RANDOM_ECY";
     public static final String CALLBACK_RANDOM = "RANDOM";
     public static final String CALLBACK_RANDOM_SCY = "RANDOM_SCY";

@@ -66,7 +66,7 @@ public class BiliTimelineCallbackQueryProvider implements CallbackQueryProvider 
     }
 
     private String timeline(String api) {
-        String s = HttpUtil.get(api, Map.of());
+        String s = HttpUtil.get(api, Map.of(BotConstant.UA, BotConstant.USER_AGENT));
         JSONObject biliJson = JSONUtil.parseObj(s);
         Integer code = (Integer) biliJson.get("code");
         if (code.compareTo(0) != 0) {

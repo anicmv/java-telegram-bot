@@ -101,7 +101,7 @@ public class RandomEcyImageChosenInlineQueryProvider implements ChosenInlineQuer
 
     private String getPiXivUrl() {
         String api = "https://api.mossia.top/randPic/pixiv";
-        String dataJson = HttpUtil.get(api, Map.of());
+        String dataJson = HttpUtil.get(api, Map.of(BotConstant.UA, BotConstant.USER_AGENT));
         JSONObject data = JSONUtil.parseObj(dataJson);
         return data.getStr("data");
     }

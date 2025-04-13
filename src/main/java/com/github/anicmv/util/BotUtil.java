@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.anicmv.config.BotConfig;
+import com.github.anicmv.contant.BotConstant;
 import com.github.anicmv.contant.XpEnum;
 import com.github.anicmv.entity.Biss;
 import com.github.anicmv.entity.Diss;
@@ -43,14 +44,14 @@ import java.util.*;
 @Log4j2
 public class BotUtil {
     public static String kfc() {
-        String response = HttpUtil.get("https://api.shadiao.pro/kfc", Map.of("Referer", "https://kfc.shadiao.pro/"));
+        String response = HttpUtil.get("https://api.shadiao.pro/kfc", Map.of(BotConstant.REFERER, BotConstant.KFC_REFERER, BotConstant.UA, BotConstant.USER_AGENT));
         JSONObject responseJson = JSONUtil.parseObj(response);
         return responseJson.getByPath("data.text").toString();
     }
 
     public static String randomUrl(String[] images) {
         int idx = (int) (Math.random() * images.length);
-        String redirectUrl = HttpUtil.redirectUrl(images[idx], Map.of());
+        String redirectUrl = HttpUtil.redirectUrl(images[idx], Map.of(BotConstant.UA, BotConstant.USER_AGENT));
         if (redirectUrl == null) {
             log.error("Error occurred during redirect URL");
         }
@@ -61,7 +62,7 @@ public class BotUtil {
     public static InputStream randomImageInputStream(String[] images) {
         int idx = (int) (Math.random() * images.length);
         String api = images[idx];
-        return HttpUtil.getInputStream(api, Map.of());
+        return HttpUtil.getInputStream(api, Map.of(BotConstant.UA, BotConstant.USER_AGENT));
     }
 
 
