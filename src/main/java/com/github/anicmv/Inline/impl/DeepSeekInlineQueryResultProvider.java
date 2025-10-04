@@ -89,7 +89,7 @@ public class DeepSeekInlineQueryResultProvider implements InlineQueryResultProvi
         return InlineQueryResultArticle.builder()
                 .id(getSortId())
                 .inputMessageContent(content)
-                .description("食用:关键词'ds'+空格+昵称 -> 点击DeepSeek")
+                .description("食用:关键词'ds'+空格+prompt -> 点击DeepSeek")
                 .thumbnailUrl(imageUrl)
                 .title("DeepSeek")
                 .replyMarkup(markup)
